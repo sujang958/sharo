@@ -4,6 +4,7 @@ import NewClient from "./interfaces/client"
 import CommandFile from "./interfaces/commandFile";
 import fs from "fs"
 import CommandDo from "./interfaces/commandDo";
+import { EventEmitter } from "events"
 
 config()
 
@@ -16,6 +17,7 @@ const client: NewClient = new Client({
     ]
 })
 
+client.music = new EventEmitter()
 client.commands = []
 client.commandsDo = new Collection()
 client.queue = new Map()
@@ -32,16 +34,7 @@ for (const file of commandFiles) {
     }
 }
 
-client.on('ready', () => {
-    if (client.commands) {
-        client.application?.commands.cache.map(command => {
-            if (!client.commandsDo?.has(command.name)) {
-                const target = client.commands?.find(cmd => cmd.name == command.name)
-                if (target)
-                    client.application?.commands.create(target)
-            }
-        })
-    }
+client.on('ready', async () => {
     console.log('logged on', client.user?.tag)
 })
 
@@ -51,7 +44,8 @@ client.on('interaction', async (interaction) => {
     const command: CommandDo | undefined = client.commandsDo.get(interaction.commandName)
     
     if (command)
-        command(interaction)
+        command(client, interaction)
 })
 
 client.login(process.env.TOKEN)
+// https://discord.com/api/oauth2/authorize?client_id=874697100494012466&permissions=242669186112&scope=applications.commands%20bot

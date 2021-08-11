@@ -6,11 +6,11 @@ export const command: ApplicationCommandData = {
     description: '봇의 핑을 보여준다.'
 }
 
-export const commandDo: CommandDo = async (interaction) => {
+export const commandDo: CommandDo = async (client, interaction) => {
     const ping: number = Date.now() - interaction.createdTimestamp
     const embed = new MessageEmbed()
         .setAuthor('핑!')
-        .addField('API Latency', `${interaction.client.ws.ping} ms`)
+        .addField('API Latency', `${client.ws.ping} ms`)
         .addField('Latency', `${ping} ms`)
         .setColor('GREEN')
         .setTimestamp()
