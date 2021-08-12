@@ -81,7 +81,9 @@ const play = async (client: NewClient, interaction: CommandInteraction, guildQue
     if (!video)
         return client.music?.emit('end', interaction)
     
-    const targetAudio = await ytdl(video.url)
+    const targetAudio = await ytdl(video.url, {
+        highWaterMark: 1<<25
+    })
     const audioResource = createAudioResource(targetAudio)
     
     if (!guildQueue.onPlaying) {
