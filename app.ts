@@ -1,10 +1,11 @@
-import { Client, Collection, Intents } from "discord.js";
+import { Client, Collection, CommandInteraction, Intents, MessageEmbed } from "discord.js";
 import { config } from "dotenv";
 import NewClient from "./interfaces/client"
 import CommandFile from "./interfaces/commandFile";
 import fs from "fs"
 import CommandDo from "./interfaces/commandDo";
 import { EventEmitter } from "events"
+import { VideoSearchResult } from "yt-search";
 
 config()
 
@@ -33,6 +34,18 @@ for (const file of commandFiles) {
         console.log(e)
     }
 }
+
+client.music.on('musicAdded', async (interaction: CommandInteraction, video: VideoSearchResult) => {
+    const embed = new MessageEmbed()
+        .setAuthor(video.title)
+        .setColor('RED')
+        .setThumbnail(video.thumbnail)
+        .addField('조회수', `${video.views.toLocaleString()} 회`, true)
+        .addField('재생 길이', `${video.duration.toString().split('ds ')[1]}`, true)
+        .setFooter(interaction.user.tag)
+        .setTimestamp()
+    interaction.reply({ embeds: [embed] })
+})
 
 client.on('ready', async () => {
     console.log('logged on', client.user?.tag)

@@ -1,7 +1,7 @@
 import { AudioPlayer, VoiceConnection } from "@discordjs/voice";
 import { StageChannel, VoiceChannel } from "discord.js"
 
-export default interface queue {
+export default interface Queue {
     voiceChannel: VoiceChannel | StageChannel
     voiceConnection: VoiceConnection
     audioPlayer: AudioPlayer
