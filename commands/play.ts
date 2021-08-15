@@ -46,6 +46,7 @@ export const commandDo: CommandDo = async (client, interaction: CommandInteracti
                     voiceConnection,
                     audioPlayer,
                     onPlaying: false,
+                    onPause: false,
                     music: [{
                         name: video.title,
                         url: video.url,
@@ -84,11 +85,12 @@ const play = async (client: NewClient, interaction: CommandInteraction, guildQue
     const targetAudio = await ytdl(video.url, {
         highWaterMark: 1<<25
     })
-    const audioResource = createAudioResource(targetAudio)
+    const audioResource = createAudioResource(targetAudio, { inlineVolume: true })
     
     if (!guildQueue.onPlaying) {
         guildQueue.onPlaying = true
         guildQueue.audioPlayer.play(audioResource)
+        guildQueue.currentAudioResource = audioResource
     }  
     
     guildQueue.audioPlayer.on(AudioPlayerStatus.Idle, async (): Promise<any> => {
@@ -102,5 +104,6 @@ const play = async (client: NewClient, interaction: CommandInteraction, guildQue
 }
 
 process.on('uncaughtException', (e) => {
-    console.log(e.message, e.name)
+    console.log(e.name, e.message)
+    console.log(e.stack)
 })

@@ -37,7 +37,7 @@ for (const file of commandFiles) {
 
 client.music.on('musicAdded', async (interaction: CommandInteraction, video: VideoSearchResult) => {
     const embed = new MessageEmbed()
-        .setAuthor(video.title)
+        .setAuthor(video.title, undefined, video.url)
         .setColor('RED')
         .setThumbnail(video.thumbnail)
         .addField('조회수', `${video.views.toLocaleString()} 회`, true)
@@ -45,6 +45,12 @@ client.music.on('musicAdded', async (interaction: CommandInteraction, video: Vid
         .setFooter(interaction.user.tag)
         .setTimestamp()
     interaction.reply({ embeds: [embed] })
+})
+
+client.music.on('end', async (interaction, queue) => {
+    queue.voiceConnection.destroy()
+    client.queue?.delete(String(interaction.guildId))
+    interaction.channel?.send({ content: '모든 음악을 재생했어요!'})
 })
 
 client.on('ready', async () => {
@@ -55,7 +61,7 @@ client.on('interaction', async (interaction) => {
     if (!interaction.isCommand()) return
     if (!client.commandsDo) return
     const command: CommandDo | undefined = client.commandsDo.get(interaction.commandName)
-    
+
     if (command)
         command(client, interaction)
 })

@@ -1,4 +1,4 @@
-import { AudioPlayer, VoiceConnection } from "@discordjs/voice";
+import { AudioPlayer, AudioResource, VoiceConnection } from "@discordjs/voice";
 import { StageChannel, VoiceChannel } from "discord.js"
 
 export default interface Queue {
@@ -7,6 +7,8 @@ export default interface Queue {
     audioPlayer: AudioPlayer
     music: Music[]
     onPlaying: boolean
+    onPause: boolean
+    currentAudioResource?: AudioResource
 }
 
 interface Music {

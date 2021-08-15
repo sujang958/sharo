@@ -12,7 +12,7 @@ export default interface NewClient extends Client {
     commandsDo?: Collection<string, CommandDo>
 }
 
-interface MusicEventEmitter extends EventEmitter {
-    on: (eventName: 'musicAdded', listener: (interaction: CommandInteraction, video: VideoSearchResult) => Promise<void> | Promise<any>) => void
-    on: (eventName: 'end', listener: (interaction: CommandInteraction, guildQueue: Queue) => Promise<void> | Promise<any>) => void
+class MusicEventEmitter extends EventEmitter {
+    on(eventName: 'musicAdded', listener: (interaction: CommandInteraction, video: VideoSearchResult) => Promise<void> | Promise<any>): void
+    on(eventName: 'end', listener: (interaction: CommandInteraction, guildQueue: Queue) => Promise<void> | Promise<any>): void
 }
